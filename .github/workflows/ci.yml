@@ -53,8 +53,7 @@ jobs:
             for binfile in $dir/*.bin; do
               if [ -f "$binfile" ]; then
                 md5=$(md5sum "$binfile" | awk '{print $1}')
-                filename=$(basename "$binfile")
-                echo "$filename  $md5" >> ci_artifacts/md5_summary.txt
+                echo "$binfile  $md5" >> ci_artifacts/md5_summary.txt
               fi
             done
 
@@ -71,11 +70,17 @@ jobs:
         name: fsm-build-output
         path: ci_artifacts
 
-    - name: Publish MD5 summary to PR
+    - name: Comment MD5 summary to PR
       if: github.event_name == 'pull_request'
-      run: |
-        echo "## ✅ BIN MD5 Summary" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo '```' >> $GITHUB_STEP_SUMMARY
-        cat ci_artifacts/md5_summary.txt >> $GITHUB_STEP_SUMMARY
-        echo '```' >> $GITHUB_STEP_SUMMARY
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const md5 = fs.readFileSync('ci_artifacts/md5_summary.txt', 'utf8');
+    
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: "## ✅ BIN MD5 Summary\n\n```\n" + md5 + "\n```"
+          });
