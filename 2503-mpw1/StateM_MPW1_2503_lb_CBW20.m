@@ -35,7 +35,7 @@
 
 	case 'SLNACheck'
 	% lna is designed to pulse not a state
-	nb_trans = 3; cmdEn = 1; cmdExtEn = 0; timeOutEn = 0; sleepEn = 0; timeOutVal = 0; dspEn = [0 1 0 0 0 0 0 0 0 1 0 1 1 1 1 ];
+	nb_trans = 3; cmdEn = 1; cmdExtEn = 0; timeOutEn = 0; sleepEn = 0; timeOutVal = 0; dspEn = [0 1 0 1 0 0 0 0 0 1 0 1 1 1 1 ];
 	cmd = 95; parameter1 = [0,0,0 ];
 	op{1,1} = 'LNASatDet'; op{1,2} = 'false'; op{1,3} = 'false'; pathComb{1} = 0; opComb{1} = 0; tgtState{1} = 'SLNASatACICheck';
 	op{2,1} = 'adcPowdBmSup'; op{2,2} = 'true'; op{2,3} = 'inbdPowInf'; pathComb{2} = 1; opComb{2} = 1; tgtState{2} = 'SACIPostDetConf';
