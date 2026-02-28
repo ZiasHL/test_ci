@@ -75,6 +75,15 @@ jobs:
         name: fsm-build-output
         path: ci_artifacts
 
+    - name: Publish MD5 summary to PR
+      if: github.event_name == 'pull_request'
+      run: |
+        echo "## ✅ BIN MD5 Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        cat ci_artifacts/md5_summary.txt >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+
     - name: Comment MD5 summary to PR
       if: github.event_name == 'pull_request_target'
       uses: actions/github-script@v7
